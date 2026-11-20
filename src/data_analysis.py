@@ -72,7 +72,7 @@ def get_jobs_by_month(df):
 def get_top_skills(df, limit=20):
 
     if limit < 1 or type(limit) != int:
-        raise ValueError("Limite inválido")
+        raise ValueError("Limite inválido.")
 
     if df.empty:
         return pd.DataFrame(columns=["skill", "total_jobs"])
@@ -85,4 +85,18 @@ def get_top_skills(df, limit=20):
     return top_skills
 
 def get_salary_metrics(df, salary_type):
-    pass
+
+    if salary_type not in ['salary_year_avg', 'salary_hour_avg']:
+        raise ValueError("Tipo de salário inválido.")
+
+    salary_type = df[salary_type].dropna()
+
+    metrics = {
+        'salary_count': salary_type.shape[0],
+        'salary_min': salary_type.min(),
+        'salary_max': salary_type.max(),
+        'salary_mean': salary_type.mean(),
+        'salary_median': salary_type.median()
+    }
+
+    return metrics
