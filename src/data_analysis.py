@@ -70,7 +70,19 @@ def get_jobs_by_month(df):
     return df_months
 
 def get_top_skills(df, limit=20):
-    pass
+
+    if limit < 1 or type(limit) != int:
+        raise ValueError("Limite inválido")
+
+    if df.empty:
+        return pd.DataFrame(columns=["skill", "total_jobs"])
+
+    df_explode = df.explode('job_skills')
+    top_skills = df_explode.value_counts('job_skills').head(limit)
+    top_skills = top_skills.reset_index()
+    top_skills.columns = ['skill', 'total_jobs']
+
+    return top_skills
 
 def get_salary_metrics(df, salary_type):
     pass
