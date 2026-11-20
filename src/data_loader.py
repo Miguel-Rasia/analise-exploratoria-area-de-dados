@@ -2,11 +2,12 @@ import pandas as pd
 import ast
 
 def load_dataset(path):
-    df = pd.read_csv(path)
-    validate_dataset(df)
-    return df
+    dataframe = pd.read_csv(path)
+    dataframe = validate_dataset(dataframe)
+    dataframe = prepare_dataset(dataframe)
+    return dataframe
 
-def validate_dataset(df):
+def validate_dataset(dataframe):
 
     required_columns = [
         'job_title_short',
@@ -28,16 +29,16 @@ def validate_dataset(df):
         'job_type_skills'
         ]
 
-    missing_columns = [column for column in required_columns if column not in df.columns]
+    missing_columns = [column for column in required_columns if column not in dataframe.columns]
 
     if missing_columns:
         raise ValueError (f"Dados incompletos: {missing_columns}")
 
-    return prepare_dataset(df)
+    return dataframe
 
-def prepare_dataset(df):
+def prepare_dataset(dataframe):
 
-    df = df.copy()
+    df = dataframe.copy()
 
     df["job_posted_date"] = pd.to_datetime(df["job_posted_date"])
 
@@ -52,4 +53,4 @@ def parse_skills(skill):
     elif isinstance(skill, str):
         return ast.literal_eval(skill)
     elif pd.isna(skill):
-            return skill
+        return skill
