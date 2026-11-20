@@ -1,8 +1,5 @@
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
-import seaborn as sns
-import data_loader as dl
 
 def filter_jobs(df, country=None, title=None, schedule=None, home_office=None):
     filtered_df = df.copy()
@@ -30,7 +27,6 @@ def filter_jobs(df, country=None, title=None, schedule=None, home_office=None):
         filtered_df = filtered_df[filtered_df['job_work_from_home'] == False]
 
     return filtered_df
-
 
 def get_job_metrics(df):
 
@@ -61,7 +57,17 @@ def get_job_metrics(df):
     return metrics
 
 def get_jobs_by_month(df):
-    pass
+
+    jobs_by_month = df['job_posted_date'].dt.month_name().value_counts()
+
+    months = ['January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December']
+    jobs_by_month = jobs_by_month.reindex(months, fill_value=0)
+
+    df_months = jobs_by_month.reset_index()
+    df_months.columns = ['month', 'total_jobs']
+
+    return df_months
 
 def get_top_skills(df, limit=20):
     pass
