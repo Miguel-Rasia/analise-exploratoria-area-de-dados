@@ -13,9 +13,12 @@ def plot_jobs_by_month(df):
 
     return fig
 
-def plot_top_skills(df):
+def plot_top_skills(df, limit=20):
 
-    data = da.get_top_skills(df)
+    if type(limit) != int or limit < 1:
+        raise ValueError("Limite inválido.")
+
+    data = da.get_top_skills(df, limit=limit)
 
     fig, ax = plt.subplots()
     ax.barh(data['skill'], data['total_jobs'])
