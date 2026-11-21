@@ -9,12 +9,21 @@ def plot_jobs_by_month(df):
     ax.set_ylabel('Total Jobs')
     ax.tick_params(axis='x', labelrotation=45)
     ax.set_title("Total Jobs per month")
-    plt.show()
 
     return fig
 
 def plot_top_skills(df):
-    pass
+
+    data = da.get_top_skills(df)
+
+    fig, ax = plt.subplots()
+    ax.barh(data['skill'], data['total_jobs'])
+    ax.invert_yaxis()
+    ax.set_xlabel('Total Jobs')
+    ax.set_ylabel('Skill')
+    ax.set_title("Most demanded skills")
+
+    return fig
 
 def plot_salary_distribution(df):
     pass
