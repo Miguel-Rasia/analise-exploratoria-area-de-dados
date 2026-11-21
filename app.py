@@ -3,12 +3,15 @@ import sys
 
 import plotly.express as px
 import streamlit as st
+from huggingface_hub import hf_hub_download
 
 
 # Keep the current project structure: app.py at the root and modules in src/.
 BASE_DIR = Path(__file__).resolve().parent
 SRC_DIR = BASE_DIR / "src"
 DATASET_PATH = BASE_DIR / "dataset" / "data_jobs.csv"
+HF_DATASET_REPO = "lukebarousse/data_jobs"
+HF_DATASET_REVISION = "ed776e5a0a8c40ea9d5efbd800772ae52e140f3e" 
 
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
@@ -171,10 +174,25 @@ with language_col:
 st.divider()
 
 
-# Load the dataset once and cache the prepared DataFrame.
+# Resolve the dataset locally when present; otherwise download it from Hugging Face.
+@st.cache_data(show_spinner=False)
+def get_dataset_path():
+    if DATASET_PATH.is_file():
+        return str(DATASET_PATH)
+
+    return hf_hub_download(
+        repo_id=HF_DATASET_REPO,
+        filename="data_jobs.csv",
+        repo_type="dataset",
+        revision=HF_DATASET_REVISION,
+    )
+
+
+# Download (if needed), prepare, and cache the dataset.
 try:
     with st.spinner(text["app_subtitle"]):
-        jobs_df = load_data(str(DATASET_PATH))
+        dataset_path = get_dataset_path()
+        jobs_df = load_data(dataset_path)
 
 except Exception as error:
     show_error(error, text)
