@@ -32,7 +32,7 @@ def validate_dataset(dataframe):
     missing_columns = [column for column in required_columns if column not in dataframe.columns]
 
     if missing_columns:
-        raise ValueError (f"Dados incompletos: {missing_columns}")
+        raise ValueError (f"missing_values: {missing_columns}")
 
     return dataframe
 

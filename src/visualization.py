@@ -16,7 +16,7 @@ def plot_jobs_by_month(df):
 def plot_top_skills(df, limit=20):
 
     if type(limit) != int or limit < 1:
-        raise ValueError("Limite inválido.")
+        raise ValueError("invalid_limit")
 
     data = da.get_top_skills(df, limit=limit)
 
@@ -32,7 +32,7 @@ def plot_top_skills(df, limit=20):
 def plot_salary_distribution(df, salary_type):
 
     if salary_type not in ['salary_year_avg', 'salary_hour_avg']:
-        raise ValueError("Tipo de salário inválido.")
+        raise ValueError("invalid_salary_type")
 
     data = df[salary_type].dropna()
 

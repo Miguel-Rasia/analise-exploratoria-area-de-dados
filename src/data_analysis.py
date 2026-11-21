@@ -25,7 +25,7 @@ def filter_jobs(df, country=None, title=None, schedule=None, home_office=None):
     elif home_office is False:
         filtered_df = filtered_df[filtered_df['job_work_from_home'] == False]
     else:
-        raise ValueError("Entrada inválida para Home-Office.")
+        raise ValueError("invalid_home_office")
 
     return filtered_df
 
@@ -73,7 +73,7 @@ def get_jobs_by_month(df):
 def get_top_skills(df, limit=20):
 
     if type(limit) != int or limit < 1:
-        raise ValueError("Limite inválido.")
+        raise ValueError("invalid_limit")
 
     if df.empty:
         return pd.DataFrame(columns=["skill", "total_jobs"])
@@ -88,7 +88,7 @@ def get_top_skills(df, limit=20):
 def get_salary_metrics(df, salary_type):
 
     if salary_type not in ['salary_year_avg', 'salary_hour_avg']:
-        raise ValueError("Tipo de salário inválido.")
+        raise ValueError("invalid_salary_type")
 
     salary_type = df[salary_type].dropna()
 
