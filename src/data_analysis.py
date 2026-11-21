@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 
 def filter_jobs(df, country=None, title=None, schedule=None, home_office=None):
@@ -23,8 +22,10 @@ def filter_jobs(df, country=None, title=None, schedule=None, home_office=None):
         pass
     elif home_office is True:
         filtered_df = filtered_df[filtered_df['job_work_from_home'] == True]
-    else:
+    elif home_office is False:
         filtered_df = filtered_df[filtered_df['job_work_from_home'] == False]
+    else:
+        raise ValueError("Entrada inválida para Home-Office.")
 
     return filtered_df
 
@@ -71,7 +72,7 @@ def get_jobs_by_month(df):
 
 def get_top_skills(df, limit=20):
 
-    if limit < 1 or type(limit) != int:
+    if type(limit) != int or limit < 1:
         raise ValueError("Limite inválido.")
 
     if df.empty:
