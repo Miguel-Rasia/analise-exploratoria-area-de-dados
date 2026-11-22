@@ -1,4 +1,5 @@
 import pandas as pd
+from collections import Counter
 
 def filter_jobs(df, country=None, title=None, schedule=None, home_office=None):
     filtered_df = df.copy()
@@ -78,12 +79,19 @@ def get_top_skills(df, limit=20):
     if df.empty:
         return pd.DataFrame(columns=["skill", "total_jobs"])
 
-    df_explode = df.explode('job_skills')
-    top_skills = df_explode.value_counts('job_skills').head(limit)
-    top_skills = top_skills.reset_index()
-    top_skills.columns = ['skill', 'total_jobs']
+    skill_counts = Counter()
 
-    return top_skills
+    for skills in df['job_skills']:
+        if isinstance(skills, (list, tuple, set)):
+            skill_counts.update(skill for skill in skills if isinstance(skill, str))
+        elif isinstance(skills, str):
+            # Mantém a compatibilidade com valores escalares: explode() também
+            # contabilizaria uma string como uma única competência.
+            skill_counts.update([skills])
+
+    top_skills = skill_counts.most_common(limit)
+
+    return pd.DataFrame(top_skills, columns=["skill", "total_jobs"])
 
 def get_salary_metrics(df, salary_type):
 
