@@ -85,8 +85,6 @@ def get_top_skills(df, limit=20):
         if isinstance(skills, (list, tuple, set)):
             skill_counts.update(skill for skill in skills if isinstance(skill, str))
         elif isinstance(skills, str):
-            # Mantém a compatibilidade com valores escalares: explode() também
-            # contabilizaria uma string como uma única competência.
             skill_counts.update([skills])
 
     top_skills = skill_counts.most_common(limit)
